@@ -65,6 +65,8 @@
             this.listView1.TabIndex = 3;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.DragDrop += new System.Windows.Forms.DragEventHandler(this.listView1_DragDrop);
+            this.listView1.DragEnter += new System.Windows.Forms.DragEventHandler(this.listView1_DragEnter);
             // 
             // headerFile
             // 
@@ -140,7 +142,7 @@
             // toolStripStatusLabel6
             // 
             this.toolStripStatusLabel6.Name = "toolStripStatusLabel6";
-            this.toolStripStatusLabel6.Size = new System.Drawing.Size(517, 19);
+            this.toolStripStatusLabel6.Size = new System.Drawing.Size(546, 19);
             this.toolStripStatusLabel6.Spring = true;
             // 
             // toolStripStatusLabel5
@@ -187,7 +189,6 @@
             this.MinimumSize = new System.Drawing.Size(570, 400);
             this.Name = "Form1";
             this.Text = "PDF Page Counter";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
