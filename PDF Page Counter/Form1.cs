@@ -11,7 +11,6 @@ namespace PDF_Page_Counter
     public partial class Form1 : Form
     {
         private static readonly string[] SizeSuffixes = {"bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
-
         public Form1()
         {
             Application.VisualStyleState = VisualStyleState.NonClientAreaEnabled;
@@ -28,13 +27,13 @@ namespace PDF_Page_Counter
             foreach (var s in handles)
                 if (File.Exists(s))
                 {
-                    if (String.Compare(Path.GetExtension(s), ".pdf", StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(Path.GetExtension(s), ".pdf", StringComparison.OrdinalIgnoreCase) == 0)
                         AddFileToListview(s);
                 }
                 else if (Directory.Exists(s))
                 {
                     var di = new DirectoryInfo(s);
-                    var files = di.GetFiles("*.pdf", SearchOption.AllDirectories);
+                    var files = di.GetFiles("*.pdf", checkBox1.Checked ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
                     foreach (var file in files)
                         AddFileToListview(file.FullName);
                 }
