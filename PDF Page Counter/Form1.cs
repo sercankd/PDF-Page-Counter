@@ -1,21 +1,29 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using iTextSharp.text.pdf;
+using static System.Int32;
 
 namespace PDF_Page_Counter
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         private static readonly string[] SizeSuffixes = {"bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"};
-        public Form1()
+        private readonly BackgroundWorker _bgw;
+
+        public MainForm()
         {
             Application.VisualStyleState = VisualStyleState.NonClientAreaEnabled;
             InitializeComponent();
+            _bgw = new BackgroundWorker();
+            _bgw.DoWork += bgw_DoWork;
+            _bgw.RunWorkerCompleted += bgw_RunWorkerCompleted;
         }
+
         private void listView1_DragEnter(object sender, DragEventArgs e)
         {
             e.Effect = DragDropEffects.Copy;
@@ -23,26 +31,24 @@ namespace PDF_Page_Counter
 
         private void listView1_DragDrop(object sender, DragEventArgs e)
         {
-            var handles = (string[]) e.Data.GetData(DataFormats.FileDrop, false);
-            foreach (var s in handles)
-                if (File.Exists(s))
-                {
-                    if (string.Compare(Path.GetExtension(s), ".pdf", StringComparison.OrdinalIgnoreCase) == 0)
-                        AddFileToListview(s);
-                }
-                else if (Directory.Exists(s))
-                {
-                    var di = new DirectoryInfo(s);
-                    var files = di.GetFiles("*.pdf", checkBox1.Checked ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
-                    foreach (var file in files)
-                        AddFileToListview(file.FullName);
-                }
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                var s = (string[]) e.Data.GetData(DataFormats.FileDrop, false);
+                _bgw.RunWorkerAsync(s);
+            }
+            while (_bgw.IsBusy)
+            {
+                Form overlay = new WorkingOverlay();
+                overlay.StartPosition = FormStartPosition.CenterParent;
+                overlay.Size = Size;
+                overlay.ShowDialog(this);
+                Application.DoEvents();
+            }
         }
 
         private void AddFileToListview(string fullFilePath)
         {
             Cursor.Current = Cursors.WaitCursor;
-
             if (!File.Exists(fullFilePath))
                 return;
             var fileName = Path.GetFileName(fullFilePath);
@@ -52,21 +58,41 @@ namespace PDF_Page_Counter
             var itm = listView1.Items.Add(fileName);
             if (fileName != null)
             {
-                var fFile = new FileInfo(fileName);
+                // ReSharper disable once UnusedVariable
+                var fileInfo = new FileInfo(fileName);
             }
             var length = new FileInfo(fullFilePath).Length;
-            itm.SubItems.Add(SizeSuffix(length)); //size column
-            var pdfReader = new PdfReader(fullFilePath);
-            var numberOfPages = pdfReader.NumberOfPages;
-            itm.SubItems.Add(numberOfPages.ToString()); //pages count
-            itm.SubItems.Add(dirName); //path
+
+            //size column
+            itm.SubItems.Add(SizeSuffix(length));
+
+            //catch errors and populate error logs listview
+            try
+            {
+                var pdfReader = new PdfReader(fullFilePath);
+                var numberOfPages = pdfReader.NumberOfPages;
+                itm.SubItems.Add("Good");
+                itm.SubItems.Add(numberOfPages.ToString());
+                itm.SubItems.Add(dirName);
+                itm.SubItems.Add("");
+            }
+            catch (Exception e)
+            {
+                itm.SubItems.Add("File Corrupted");
+                itm.SubItems.Add("null");
+                itm.SubItems.Add(dirName);
+                itm.SubItems.Add(e.Message);
+                throw;
+            }
+
+            //file path
 
             //calculate items count with linq
             var countItems = listView1.Items.Cast<ListViewItem>().Count();
             toolStripStatusLabel3.Text = countItems.ToString();
 
             //calculate total pages count with linq
-            var countTotalPages = listView1.Items.Cast<ListViewItem>().Sum(item => int.Parse(item.SubItems[2].Text));
+            var countTotalPages = listView1.Items.Cast<ListViewItem>().Sum(item => Parse(item.SubItems[3].Text));
             toolStripStatusLabel4.Text = countTotalPages.ToString();
             Cursor.Current = Cursors.Default;
         }
@@ -91,6 +117,7 @@ namespace PDF_Page_Counter
                 adjustedSize /= 1024;
             }
 
+            // ReSharper disable once FormatStringProblem
             return string.Format("{0:n" + decimalPlaces + "} {1}",
                 adjustedSize,
                 SizeSuffixes[mag]);
@@ -107,6 +134,59 @@ namespace PDF_Page_Counter
             listView1.Items.Clear();
             toolStripStatusLabel3.Text = @"0";
             toolStripStatusLabel4.Text = @"0";
+        }
+
+        private void bgw_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Invoke(new Action<object>(args =>
+            {
+                var handles = (string[]) e.Argument;
+                foreach (var s in handles)
+                    if (File.Exists(s))
+                    {
+                        if (string.Compare(Path.GetExtension(s), ".pdf", StringComparison.OrdinalIgnoreCase) == 0)
+                            AddFileToListview(s);
+                    }
+                    else if (Directory.Exists(s))
+                    {
+                        var di = new DirectoryInfo(s);
+                        var files = di.GetFiles("*.pdf",
+                            checkBox1.Checked ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
+                        foreach (var file in files)
+                            AddFileToListview(file.FullName);
+                    }
+            }), e.Argument);
+        }
+
+        private void bgw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            ActiveForm?.Hide();
+        }
+
+        private void listView1_MouseClick(object sender, MouseEventArgs e)
+        {
+            var listView = sender as ListView;
+            if (e.Button == MouseButtons.Right)
+            {
+                var item = listView?.GetItemAt(e.X, e.Y);
+                if (item != null)
+                {
+                    item.Selected = true;
+                    contextMenuStrip1.Show(listView, e.Location);
+                }
+            }
+        }
+
+        private void openFileLocationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start(listView1.SelectedItems[0].SubItems[4].Text);
+        }
+
+        private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            toolStripStatusLabel3.Text = (Parse(toolStripStatusLabel3.Text) - 1).ToString();
+            toolStripStatusLabel4.Text = (Parse(toolStripStatusLabel4.Text) - Parse(listView1.SelectedItems[0].SubItems[3].Text)).ToString();
+            listView1.SelectedItems[0].Remove();
         }
     }
 }
