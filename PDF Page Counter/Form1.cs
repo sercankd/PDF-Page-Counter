@@ -66,7 +66,7 @@ namespace PDF_Page_Counter
             //size column
             itm.SubItems.Add(SizeSuffix(length));
 
-            //catch errors and populate error logs listview
+            //catch file problems
             try
             {
                 var pdfReader = new PdfReader(fullFilePath);
@@ -74,7 +74,6 @@ namespace PDF_Page_Counter
                 itm.SubItems.Add("Good");
                 itm.SubItems.Add(numberOfPages.ToString());
                 itm.SubItems.Add(dirName);
-                itm.SubItems.Add("");
             }
             catch (Exception e)
             {
@@ -82,10 +81,7 @@ namespace PDF_Page_Counter
                 itm.SubItems.Add("null");
                 itm.SubItems.Add(dirName);
                 itm.SubItems.Add(e.Message);
-                throw;
             }
-
-            //file path
 
             //calculate items count with linq
             var countItems = listView1.Items.Cast<ListViewItem>().Count();
