@@ -82,7 +82,7 @@
             // headerFile
             // 
             this.headerFile.Text = "File";
-            this.headerFile.Width = 200;
+            this.headerFile.Width = 175;
             // 
             // headerFilesize
             // 
@@ -201,7 +201,7 @@
             // toolStripStatusLabel6
             // 
             this.toolStripStatusLabel6.Name = "toolStripStatusLabel6";
-            this.toolStripStatusLabel6.Size = new System.Drawing.Size(515, 19);
+            this.toolStripStatusLabel6.Size = new System.Drawing.Size(546, 19);
             this.toolStripStatusLabel6.Spring = true;
             // 
             // toolStripStatusLabel5

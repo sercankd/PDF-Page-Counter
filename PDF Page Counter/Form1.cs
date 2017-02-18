@@ -77,8 +77,8 @@ namespace PDF_Page_Counter
             }
             catch (Exception e)
             {
-                itm.SubItems.Add("File Corrupted");
-                itm.SubItems.Add("null");
+                itm.SubItems.Add("Corrupted File");
+                itm.SubItems.Add("0");
                 itm.SubItems.Add(dirName);
                 itm.SubItems.Add(e.Message);
             }
