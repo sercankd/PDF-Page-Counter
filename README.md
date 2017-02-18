@@ -5,8 +5,9 @@ Just drag & drop folders or multiple pdf files into program.
 
 It depends on iTextSharp library.
 
-Please feel free to fork it, edit it.
+Sorry about spaghetti code.
+Feel free to fork it or edit it.
 
 # Screenshot from program
-![Screenshot of the program](https://i.imgur.com/toekA80.png)
+![Screenshot of the program](https://i.imgur.com/OiCU98L.png)
 
