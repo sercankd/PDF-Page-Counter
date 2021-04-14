@@ -50,6 +50,7 @@
             this.toolStripStatusLabel6 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel5 = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.button1 = new System.Windows.Forms.Button();
             this.contextMenuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -69,6 +70,7 @@
             this.columnHeader2});
             this.listView1.FullRowSelect = true;
             this.listView1.GridLines = true;
+            this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(0, 27);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(805, 425);
@@ -81,32 +83,32 @@
             // 
             // headerFile
             // 
-            this.headerFile.Text = "File";
+            this.headerFile.Text = "Arquivo";
             this.headerFile.Width = 175;
             // 
             // headerFilesize
             // 
-            this.headerFilesize.Text = "Filesize";
+            this.headerFilesize.Text = "Tamanho";
             this.headerFilesize.Width = 100;
             // 
             // columnHeader1
             // 
-            this.columnHeader1.Text = "File Status";
+            this.columnHeader1.Text = "Status do Arquivo";
             this.columnHeader1.Width = 100;
             // 
             // headerPagescount
             // 
-            this.headerPagescount.Text = "Pages Count";
+            this.headerPagescount.Text = "Total de Páginas";
             this.headerPagescount.Width = 100;
             // 
             // headerFilepath
             // 
-            this.headerFilepath.Text = "File Path";
+            this.headerFilepath.Text = "Caminho";
             this.headerFilepath.Width = 200;
             // 
             // columnHeader2
             // 
-            this.columnHeader2.Text = "Errors";
+            this.columnHeader2.Text = "Erros";
             this.columnHeader2.Width = 200;
             // 
             // contextMenuStrip1
@@ -140,9 +142,9 @@
             this.label1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.label1.Location = new System.Drawing.Point(81, 4);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(275, 17);
+            this.label1.Size = new System.Drawing.Size(209, 17);
             this.label1.TabIndex = 4;
-            this.label1.Text = "Drag and Drop Files or Folders into list below";
+            this.label1.Text = "Arraste a pasta para a lista abaixo";
             // 
             // button2
             // 
@@ -150,7 +152,7 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 6;
-            this.button2.Text = "Clear List";
+            this.button2.Text = "Limpar Lista";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
@@ -160,20 +162,20 @@
             this.checkBox1.Checked = true;
             this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.checkBox1.Location = new System.Drawing.Point(662, 5);
+            this.checkBox1.Location = new System.Drawing.Point(680, 4);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.checkBox1.Size = new System.Drawing.Size(137, 18);
+            this.checkBox1.Size = new System.Drawing.Size(113, 18);
             this.checkBox1.TabIndex = 7;
-            this.checkBox1.Text = "Include Subdirectories";
+            this.checkBox1.Text = "Incluir Subpastas";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // StatusItemsCount
             // 
             this.StatusItemsCount.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
             this.StatusItemsCount.Name = "StatusItemsCount";
-            this.StatusItemsCount.Size = new System.Drawing.Size(39, 19);
-            this.StatusItemsCount.Text = "Items:";
+            this.StatusItemsCount.Size = new System.Drawing.Size(57, 19);
+            this.StatusItemsCount.Text = "Arquivos:";
             // 
             // toolStripStatusLabel3
             // 
@@ -187,8 +189,8 @@
             this.toolStripStatusLabel2.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
             this.toolStripStatusLabel2.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(105, 19);
-            this.toolStripStatusLabel2.Text = "Total Page Count:";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(128, 19);
+            this.toolStripStatusLabel2.Text = "Total geral de páginas:";
             // 
             // toolStripStatusLabel4
             // 
@@ -201,19 +203,13 @@
             // toolStripStatusLabel6
             // 
             this.toolStripStatusLabel6.Name = "toolStripStatusLabel6";
-            this.toolStripStatusLabel6.Size = new System.Drawing.Size(546, 19);
+            this.toolStripStatusLabel6.Size = new System.Drawing.Size(577, 19);
             this.toolStripStatusLabel6.Spring = true;
             // 
             // toolStripStatusLabel5
             // 
-            this.toolStripStatusLabel5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripStatusLabel5.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.toolStripStatusLabel5.IsLink = true;
             this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
-            this.toolStripStatusLabel5.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.toolStripStatusLabel5.Size = new System.Drawing.Size(72, 19);
-            this.toolStripStatusLabel5.Text = "Github Page";
-            this.toolStripStatusLabel5.Click += new System.EventHandler(this.toolStripStatusLabel5_Click);
+            this.toolStripStatusLabel5.Size = new System.Drawing.Size(0, 19);
             // 
             // statusStrip1
             // 
@@ -233,11 +229,22 @@
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(609, 1);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 8;
+            this.button1.Text = "Relatório";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(805, 479);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label1);
@@ -248,7 +255,7 @@
             this.MaximumSize = new System.Drawing.Size(821, 518);
             this.MinimumSize = new System.Drawing.Size(570, 400);
             this.Name = "MainForm";
-            this.Text = "PDF Page Counter";
+            this.Text = "Contador de Páginas de PDF";
             this.contextMenuStrip1.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -278,6 +285,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem openFileLocationToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteToolStripMenuItem;
+        private System.Windows.Forms.Button button1;
     }
 }
 
