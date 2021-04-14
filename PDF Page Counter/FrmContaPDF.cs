@@ -41,7 +41,7 @@ namespace PDF_Page_Counter
                 Form overlay = new WorkingOverlay();
                 overlay.StartPosition = FormStartPosition.CenterParent;
                 overlay.Size = Size;
-                overlay.ShowDialog(this);
+                //overlay.ShowDialog(this);
                 Application.DoEvents();
             }
         }
@@ -71,13 +71,13 @@ namespace PDF_Page_Counter
             {
                 var pdfReader = new PdfReader(fullFilePath);
                 var numberOfPages = pdfReader.NumberOfPages;
-                itm.SubItems.Add("Good");
+                itm.SubItems.Add("Bom");
                 itm.SubItems.Add(numberOfPages.ToString());
                 itm.SubItems.Add(dirName);
             }
             catch (Exception e)
             {
-                itm.SubItems.Add("Corrupted File");
+                itm.SubItems.Add("Arquivo corrompido");
                 itm.SubItems.Add("0");
                 itm.SubItems.Add(dirName);
                 itm.SubItems.Add(e.Message);
@@ -119,10 +119,7 @@ namespace PDF_Page_Counter
                 SizeSuffixes[mag]);
         }
 
-        private void toolStripStatusLabel5_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://github.com/sercankd/PDF-Page-Counter/");
-        }
+  
 
         // Clears listview items sets counters to zero
         private void button2_Click(object sender, EventArgs e)
@@ -156,7 +153,7 @@ namespace PDF_Page_Counter
 
         private void bgw_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            ActiveForm?.Hide();
+          //  ActiveForm?.Hide();
         }
 
         private void listView1_MouseClick(object sender, MouseEventArgs e)
@@ -183,6 +180,11 @@ namespace PDF_Page_Counter
             toolStripStatusLabel3.Text = (Parse(toolStripStatusLabel3.Text) - 1).ToString();
             toolStripStatusLabel4.Text = (Parse(toolStripStatusLabel4.Text) - Parse(listView1.SelectedItems[0].SubItems[3].Text)).ToString();
             listView1.SelectedItems[0].Remove();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Exportar Excel");
         }
     }
 }
